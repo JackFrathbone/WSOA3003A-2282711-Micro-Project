@@ -19,6 +19,13 @@ public class Player_Stats : MonoBehaviour
     public bool armWound;
     public bool legWound;
 
+    private Battle_Manager manager;
+
+    private void Start()
+    {
+        manager = GetComponent<Battle_Manager>();
+    }
+
     public void UpdateWound(string bodyPart)
     {
         currentWounds += 1;
@@ -43,9 +50,9 @@ public class Player_Stats : MonoBehaviour
             legWound = true;
         }
 
-        if(currentWounds > maxWounds)
+        if(currentWounds >= maxWounds)
         {
-            //end match
+            manager.EndMatch(this);
         }
     }
 

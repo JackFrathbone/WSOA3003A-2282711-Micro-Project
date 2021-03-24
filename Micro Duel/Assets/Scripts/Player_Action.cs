@@ -4,7 +4,7 @@ using UnityEngine;
 public class Player_Action : MonoBehaviour
 {
     public string actionName;
-    public string actionDescription;
+    private string actionDescription;
 
     public bool useOnSelf;
 
@@ -20,6 +20,15 @@ public class Player_Action : MonoBehaviour
     {
         battleManager = GameObject.FindGameObjectWithTag("GameController").GetComponent<Battle_Manager>();
         GetComponentInChildren<TextMeshProUGUI>().text = actionName;
+
+        if (!useOnSelf)
+        {
+        actionDescription = "Hit Bonus: +" + chanceToHit.ToString() + "\n" + "Wound Bonus: +" + chanceToWound.ToString() + "\n" + "Vuln Increase: +" + vulnerabilityMod.ToString() + "\n" + "Combo Increase: +" + comboMod.ToString();
+        }
+        else
+        {
+            actionDescription = "Hit Bonus: +" + chanceToHit.ToString() + "\n" + "Wound Bonus: +" + chanceToWound.ToString() + "\n" + "Vuln Increase: " + vulnerabilityMod.ToString() + "\n" + "Combo Increase: " + comboMod.ToString();
+        }
     }
 
     public void ClickToDisplay()
