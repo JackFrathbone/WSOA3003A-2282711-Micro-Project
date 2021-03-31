@@ -98,7 +98,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 16
+  m_fontStyle: 17
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -146,7 +146,7 @@ GameObject:
   - component: {fileID: 5177259009462451549}
   - component: {fileID: 3407570916730559839}
   - component: {fileID: 6626020323541994902}
-  - component: {fileID: 22408189860844751}
+  - component: {fileID: 4761691085551886004}
   m_Layer: 5
   m_Name: Action_Button
   m_TagString: Untagged
@@ -256,9 +256,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 22408189860844751}
-        m_TargetAssemblyTypeName: Player_Action, Assembly-CSharp
-        m_MethodName: ClickToDisplay
+      - m_Target: {fileID: 4761691085551886004}
+        m_TargetAssemblyTypeName: ActionButton, Assembly-CSharp
+        m_MethodName: ActivateButton
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -268,7 +268,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &22408189860844751
+--- !u!114 &4761691085551886004
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -277,8 +277,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 4692563492583143637}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 17ccc44b86448c94fb224ba0331e7a7a, type: 3}
+  m_Script: {fileID: 11500000, guid: 853fbee3f4426c348965a028f47370b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  actionName: 
-  actionDescription: 
+  action: {fileID: 0}
+  battleManager: {fileID: 0}
