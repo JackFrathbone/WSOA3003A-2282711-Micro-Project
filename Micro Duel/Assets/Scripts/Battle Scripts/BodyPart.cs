@@ -25,6 +25,11 @@ public class BodyPart : MonoBehaviour
         woundDisplay.GetComponentInChildren<ParticleSystem>().Play();
     }
 
+    public void StopDisplayWound()
+    {
+        woundDisplay.SetActive(false);
+    }
+
     public string GetPartWoundingDescription()
     {
         string desc = "";

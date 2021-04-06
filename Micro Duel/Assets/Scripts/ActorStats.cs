@@ -27,7 +27,10 @@ public class ActorStats : MonoBehaviour
     private void Start()
     {
         battleManager = GameObject.FindGameObjectWithTag("GameController").GetComponent<BattleManager>();
+    }
 
+    public void SetBodyPartOwner()
+    {
         foreach (BodyPart bodyPart in bodyParts)
         {
             bodyPart.partOwner = this;
@@ -43,10 +46,10 @@ public class ActorStats : MonoBehaviour
         {
             attackDif = "+" + (attackSkill - otherStat.attackSkill).ToString();
         }
-        else if(attackSkill < otherStat.attackSkill)
+        else if (attackSkill < otherStat.attackSkill)
         {
             attackDif = "-" + (otherStat.attackSkill - attackSkill).ToString();
-        } 
+        }
         else
         {
             attackDif = "0";
@@ -118,7 +121,7 @@ public class ActorStats : MonoBehaviour
     public void AddWound(BodyPart part)
     {
         currentWounds++;
-        if(currentWounds >= health)
+        if (currentWounds >= health)
         {
             battleManager.ActorDeath(this);
         }
@@ -129,6 +132,19 @@ public class ActorStats : MonoBehaviour
             {
                 part.isWounded = true;
             }
+        }
+    }
+
+    public void ResetStats()
+    {
+        currentRisk = 0;
+        currentCombo = 0;
+        currentWounds = 0;
+
+        foreach(BodyPart bodyPart in bodyParts)
+        {
+            bodyPart.isWounded = false;
+            bodyPart.StopDisplayWound();
         }
     }
 }

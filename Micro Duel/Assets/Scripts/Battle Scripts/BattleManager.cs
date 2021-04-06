@@ -44,10 +44,16 @@ public class BattleManager : MonoBehaviour
 
     public void StartBattle(ActorStats p1, ActorStats p2)
     {
+        gameManager.RemoveOverlays();
+
         playerStats = p1;
         enemyStats = p2;
-        enemyLogic = enemyStats.gameObject.GetComponent<EnemyLogic>();
+        enemyLogic = gameObject.GetComponent<EnemyLogic>();
         actionLog = GetComponent<ActionLog>();
+
+        playerStats.SetBodyPartOwner();
+        enemyStats.SetBodyPartOwner();
+
         UpdateStats();
 
         //Determines which player goes first
@@ -322,6 +328,23 @@ public class BattleManager : MonoBehaviour
     {
         _chanceTooltip.gameObject.SetActive(false);
         _woundToolTip.gameObject.SetActive(false);
+    }
+
+    public void ResetMatch()
+    {
+        playerStats.ResetStats();
+        enemyStats.ResetStats();
+        StartBattle(playerStats, enemyStats);
+    }
+
+    public void ClearMatch()
+    {
+        playerStats.ResetStats();
+        enemyStats.ResetStats();
+
+        enemyStats.gameObject.SetActive(false);
+
+        enemyStats = null;
     }
 
     private IEnumerator EndMatch(string condition)

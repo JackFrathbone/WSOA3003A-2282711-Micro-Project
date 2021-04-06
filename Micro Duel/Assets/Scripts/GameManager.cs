@@ -9,17 +9,31 @@ public class GameManager : MonoBehaviour
 
     private BattleManager battleManager;
     public ActorStats playerStats;
-    public ActorStats currentEnemy;
+
+    //Visual for battle mode
+    public GameObject battleModeVisuals;
+    public GameObject mapModeVisuals;
 
     private void Start()
     {
         battleManager = GetComponent<BattleManager>();
         _introOverlay.SetActive(true);
+        battleModeVisuals.SetActive(false);
     }
 
-    public void ActivateBattle()
+    public void ActivateBattle(ActorStats enemySelected)
     {
-        battleManager.StartBattle(playerStats, currentEnemy);
+        battleModeVisuals.SetActive(true);
+        mapModeVisuals.SetActive(false);
+        battleManager.StartBattle(playerStats, enemySelected);
+    }
+
+    public void BackToMap()
+    {
+        battleModeVisuals.SetActive(false);
+        mapModeVisuals.SetActive(true);
+
+        battleManager.ClearMatch();
     }
 
     public void WinMatch()
@@ -30,6 +44,12 @@ public class GameManager : MonoBehaviour
     public void LoseMatch()
     {
         _loseOverlay.SetActive(true);
+    }
+
+    public void RemoveOverlays()
+    {
+        _winOverlay.SetActive(false);
+        _loseOverlay.SetActive(false);
     }
 
     public void Restart()
