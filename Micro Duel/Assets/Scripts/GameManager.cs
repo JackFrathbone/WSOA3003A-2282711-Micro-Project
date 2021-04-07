@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class GameManager : MonoBehaviour
 {
@@ -13,6 +14,13 @@ public class GameManager : MonoBehaviour
     //Visual for battle mode
     public GameObject battleModeVisuals;
     public GameObject mapModeVisuals;
+
+    //Visuals for map mode
+    public GameObject levelUpVisual;
+    public TextMeshProUGUI levelUpText;
+
+    public GameObject statVisual;
+    public TextMeshProUGUI statVisualText;
 
     private void Start()
     {
@@ -36,9 +44,11 @@ public class GameManager : MonoBehaviour
         battleManager.ClearMatch();
     }
 
-    public void WinMatch()
+    public void WinMatch(string input)
     {
         _winOverlay.SetActive(true);
+        levelUpVisual.SetActive(true);
+        levelUpText.text = input;
     }
 
     public void LoseMatch()

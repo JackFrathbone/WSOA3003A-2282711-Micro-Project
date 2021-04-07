@@ -27,7 +27,7 @@ public class PlayerController : MonoBehaviour
         }
         else if(visual.enabled && onStaircase != null)
         {
-            playerControlManager.UseStaircase(onStaircase);
+            playerControlManager.UseStaircase(onStaircase, this.transform.position);
         }
     }
 

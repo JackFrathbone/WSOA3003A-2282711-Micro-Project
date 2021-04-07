@@ -19,8 +19,9 @@ public class PlayerControlManager : MonoBehaviour
         gameManager.ActivateBattle(enemyStats);
     }
 
-    public void UseStaircase(Staircase staircase)
+    public void UseStaircase(Staircase staircase , Vector2 newPos)
     {
         staircase.UseStairs();
+        gameObject.transform.position = newPos;
     }
 }

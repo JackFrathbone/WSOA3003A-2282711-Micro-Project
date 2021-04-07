@@ -29,8 +29,10 @@ public class ActorStats : MonoBehaviour
         battleManager = GameObject.FindGameObjectWithTag("GameController").GetComponent<BattleManager>();
     }
 
-    public void SetBodyPartOwner()
+    public void SetBodyPartOwner(List<BodyPart> bodyPartsList)
     {
+        bodyParts = bodyPartsList;
+
         foreach (BodyPart bodyPart in bodyParts)
         {
             bodyPart.partOwner = this;
@@ -87,7 +89,7 @@ public class ActorStats : MonoBehaviour
             initDif = "0";
         }
 
-        return "Attack Difference: " + attackDif + "\n" + "Defence Difference: " + defenceDif + "\n" + "Max Wounds: " + health + "\n" + "Initiative: " + initDif;
+        return "Attack Difference: " + attackDif + "\n" + "Defence Difference: " + defenceDif + "\n" + "Health Diference: " + (health-otherStat.health).ToString() + "\n" + "Initiative: " + initDif;
     }
 
     public void SetRisk(int i)

@@ -1,11 +1,12 @@
 using UnityEngine;
 using TMPro;
+using System.Collections.Generic;
 using System.Collections;
 
 public class BattleManager : MonoBehaviour
 {
     private string currentTurn;
-    private GameManager gameManager;
+    public GameManager gameManager;
 
     //The Two Opponents
     public ActorStats playerStats;
@@ -36,6 +37,9 @@ public class BattleManager : MonoBehaviour
 
     private ActionLog actionLog;
 
+    [SerializeField] List<BodyPart> enemyBodyParts = new List<BodyPart>();
+    [SerializeField] List<BodyPart> playerBodyParts = new List<BodyPart>();
+
     private void Start()
     {
         actionLog = GetComponent<ActionLog>();
@@ -51,8 +55,8 @@ public class BattleManager : MonoBehaviour
         enemyLogic = gameObject.GetComponent<EnemyLogic>();
         actionLog = GetComponent<ActionLog>();
 
-        playerStats.SetBodyPartOwner();
-        enemyStats.SetBodyPartOwner();
+        playerStats.SetBodyPartOwner(playerBodyParts);
+        enemyStats.SetBodyPartOwner(enemyBodyParts);
 
         UpdateStats();
 
@@ -84,7 +88,17 @@ public class BattleManager : MonoBehaviour
             }
         }
 
- 
+        //Clears action log
+        foreach (Transform child in actionLog.eventParent.transform)
+        {
+            GameObject.Destroy(child.gameObject);
+        }
+
+        //Clears action buttons
+        foreach (Transform child in actionGenerator.parent.transform)
+        {
+            GameObject.Destroy(child.gameObject);
+        }
 
         //Generate action buttons for the player
         foreach (ActorActions action in playerStats.actions)
@@ -347,12 +361,31 @@ public class BattleManager : MonoBehaviour
         enemyStats = null;
     }
 
+    private string LevelUpPlayer()
+    {
+        //adds the stats for the level up and outputs a string for the display
+        string _levelUpText = "";
+
+        playerStats.attackSkill += 5;
+        playerStats.defenceSkill += 5;
+
+        _levelUpText = "You have gained +5 attack" + "\n" + "You have gained +5 defence" + "\n";
+
+        if(playerStats.health < enemyStats.health)
+        {
+            _levelUpText += "You gained +" + (enemyStats.health - playerStats.health).ToString() + " health";
+            playerStats.health = enemyStats.health;
+        }
+
+        return _levelUpText;
+    }
+
     private IEnumerator EndMatch(string condition)
     {
         yield return new WaitForSeconds(2f);
         if (condition == "Win")
         {
-            gameManager.WinMatch();
+            gameManager.WinMatch(LevelUpPlayer());
         }
         else if(condition == "Lose")
         {
