@@ -24,4 +24,11 @@ public class PlayerControlManager : MonoBehaviour
         staircase.UseStairs();
         gameObject.transform.position = newPos;
     }
+
+    public void UseItem()
+    {
+        gameManager.battleManager.playerStats.health += 1;
+        gameManager.levelUpVisual.SetActive(true);
+        gameManager.levelUpText.text = "You gained +1 Health";
+    }
 }

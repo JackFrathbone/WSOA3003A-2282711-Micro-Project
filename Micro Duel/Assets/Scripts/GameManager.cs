@@ -8,7 +8,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject _winOverlay;
     [SerializeField] GameObject _loseOverlay;
 
-    private BattleManager battleManager;
+    public BattleManager battleManager;
     public ActorStats playerStats;
 
     //Visual for battle mode

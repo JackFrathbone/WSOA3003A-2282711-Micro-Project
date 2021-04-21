@@ -9,6 +9,9 @@ public class PlayerController : MonoBehaviour
 
     public Staircase onStaircase;
 
+    public bool onItem;
+    private GameObject item;
+
     private void Start()
     {
         playerControlManager = GetComponentInParent<PlayerControlManager>();
@@ -17,17 +20,23 @@ public class PlayerController : MonoBehaviour
 
     private void OnMouseDown()
     {
-        if (visual.enabled && onEnemy == null && onStaircase == null)
+        if (visual.enabled && onEnemy == null && onStaircase == null && onItem == false)
         {
             playerControlManager.Move(this.transform.position);
         }
-        else if(visual.enabled && onEnemy != null)
+        else if (visual.enabled && onEnemy != null)
         {
             playerControlManager.StartBattle(onEnemy);
         }
-        else if(visual.enabled && onStaircase != null)
+        else if (visual.enabled && onStaircase != null)
         {
             playerControlManager.UseStaircase(onStaircase, this.transform.position);
+        }
+        else if (visual.enabled && onItem != false)
+        {
+            playerControlManager.UseItem();
+            playerControlManager.Move(this.transform.position);
+            Destroy(item);
         }
     }
 
@@ -47,6 +56,12 @@ public class PlayerController : MonoBehaviour
             onStaircase = collision.gameObject.GetComponent<Staircase>();
             visual.enabled = true;
         }
+        else if(collision.gameObject.tag == "Item")
+        {
+            onItem = true;
+            item = collision.gameObject;
+            visual.enabled = true;
+        }
         else
         {
             visual.enabled = true;
@@ -57,5 +72,7 @@ public class PlayerController : MonoBehaviour
     {
         visual.enabled = true;
         onEnemy = null;
+
+        onItem = false;
     }
 }

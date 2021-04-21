@@ -2,6 +2,7 @@ using UnityEngine;
 using TMPro;
 using System.Collections.Generic;
 using System.Collections;
+using UnityEngine.UI;
 
 public class BattleManager : MonoBehaviour
 {
@@ -32,7 +33,9 @@ public class BattleManager : MonoBehaviour
     [SerializeField] TextMeshProUGUI _enemyComboLabel;
     [SerializeField] TextMeshProUGUI _enemyRiskLabel;
 
-    [SerializeField] TextMeshProUGUI _chanceTooltip;
+    //[SerializeField] TextMeshProUGUI _chanceTooltip;
+    [SerializeField] Image hitChanceIcon;
+    [SerializeField] Image woundChanceIcon;
     [SerializeField] TextMeshProUGUI _woundToolTip;
 
     private ActionLog actionLog;
@@ -66,13 +69,13 @@ public class BattleManager : MonoBehaviour
             currentTurn = "Player";
             actionLog.AddToActionLog("Player goes first", Color.green);
         }
-        else if(enemyStats.initiativeSkill > playerStats.initiativeSkill)
+        else if (enemyStats.initiativeSkill > playerStats.initiativeSkill)
         {
             currentTurn = "Enemy";
             actionLog.AddToActionLog("Enemy goes first", Color.red);
             enemyLogic.BeginTurn(this);
         }
-        else if(enemyStats.initiativeSkill == playerStats.initiativeSkill)
+        else if (enemyStats.initiativeSkill == playerStats.initiativeSkill)
         {
             int splitChance = Random.Range(0, 2);
             if (splitChance == 0)
@@ -165,7 +168,7 @@ public class BattleManager : MonoBehaviour
             currentTurn = "Enemy";
             enemyLogic.BeginTurn(this);
         }
-        else if(currentTurn == "Enemy")
+        else if (currentTurn == "Enemy")
         {
             currentTurn = "Player";
         }
@@ -259,6 +262,11 @@ public class BattleManager : MonoBehaviour
         actorStats.SetCombo(action.GetComboChange());
         UpdateStats();
         NextTurn();
+
+        if(actorStats == playerStats && currentPlayerAction != null)
+        {
+            ShowChanceTooltip(bodyPart);
+        }
     }
 
     public bool CalculateHit(ActorStats actorStats, ActorStats opponentStats, ActorActions action)
@@ -283,7 +291,7 @@ public class BattleManager : MonoBehaviour
     {
         int hitChance = (action.GetHitBonus() + p2.currentRisk + (p1.attackSkill - p2.defenceSkill));
 
-        if(p2.currentRisk == 100)
+        if (p2.currentRisk == 100)
         {
             hitChance = 100;
         }
@@ -331,16 +339,22 @@ public class BattleManager : MonoBehaviour
     {
         if (currentPlayerAction != null)
         {
-            _chanceTooltip.gameObject.SetActive(true);
+            //_chanceTooltip.gameObject.SetActive(true);
             _woundToolTip.gameObject.SetActive(true);
-            _chanceTooltip.text = "Hit: " + GetHitChance(playerStats, enemyStats, currentPlayerAction).ToString() + "%" + "\n" + "Wound: " + GetWoundChance(playerStats, enemyStats, currentPlayerAction).ToString() + "%";
+            //_chanceTooltip.text = "Hit: " + GetHitChance(playerStats, enemyStats, currentPlayerAction).ToString() + "%" + "\n" + "Wound: " + GetWoundChance(playerStats, enemyStats, currentPlayerAction).ToString() + "%";
+            hitChanceIcon.color = new Color(hitChanceIcon.color.r, hitChanceIcon.color.g, hitChanceIcon.color.b, GetHitChance(playerStats, enemyStats, currentPlayerAction) / 100f);
+            woundChanceIcon.color = new Color(hitChanceIcon.color.r, hitChanceIcon.color.g, hitChanceIcon.color.b, GetWoundChance(playerStats, enemyStats, currentPlayerAction) / 100f);
+
             _woundToolTip.text = "Wound Effect: " + "\n" + bodyPart.GetPartWoundingDescription();
         }
     }
 
     public void HideChanceToolTip()
     {
-        _chanceTooltip.gameObject.SetActive(false);
+        //_chanceTooltip.gameObject.SetActive(false);
+        hitChanceIcon.color = new Color(hitChanceIcon.color.r, hitChanceIcon.color.g, hitChanceIcon.color.b, 0f);
+        woundChanceIcon.color = new Color(hitChanceIcon.color.r, hitChanceIcon.color.g, hitChanceIcon.color.b, 0f);
+
         _woundToolTip.gameObject.SetActive(false);
     }
 
@@ -366,12 +380,15 @@ public class BattleManager : MonoBehaviour
         //adds the stats for the level up and outputs a string for the display
         string _levelUpText = "";
 
-        playerStats.attackSkill += 5;
-        playerStats.defenceSkill += 5;
+        playerStats.attackSkill += 10;
+        playerStats.defenceSkill += 10;
+        playerStats.initiativeSkill += 1;
 
-        _levelUpText = "You have gained +5 attack" + "\n" + "You have gained +5 defence" + "\n";
+        playerStats.gameObject.GetComponentInChildren<TextMeshPro>().text = playerStats.initiativeSkill.ToString();
 
-        if(playerStats.health < enemyStats.health)
+        _levelUpText = "You have gained a level" + "\n";
+
+        if (playerStats.health < enemyStats.health)
         {
             _levelUpText += "You gained +" + (enemyStats.health - playerStats.health).ToString() + " health";
             playerStats.health = enemyStats.health;
@@ -387,7 +404,7 @@ public class BattleManager : MonoBehaviour
         {
             gameManager.WinMatch(LevelUpPlayer());
         }
-        else if(condition == "Lose")
+        else if (condition == "Lose")
         {
             gameManager.LoseMatch();
         }
